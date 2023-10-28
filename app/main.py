@@ -18,12 +18,21 @@ def main():
     err_response = "HTTP/1.1 404 NOT FOUND\r\n\r\n"
 
     data = conn.recv(1024).decode("utf-8")
-    path = data.split(" ")[1]
+    #    path = data.split(" ")[1]
 
-    if path == "/":
-        conn.send(response.encode())
-    else:
-        conn.send(err_response.encode())
+    request = data.split(" ")
+
+    stringResponse = request[1].split()[1]
+
+    res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {len(stringResponse)}\r\n\r\n {stringResponse}"
+
+    conn.send(res.encode())
+
+
+# if path == "/":
+#     conn.send(response.encode())
+# else:
+#    conn.send(err_response.encode())
 
 
 if __name__ == "__main__":
