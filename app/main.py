@@ -47,7 +47,7 @@ def get_response(request, files = None):
         response = (
             "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 0\r\n\r\n"
         )
-    elif path == "/user-agent":
+    elif path.startswith("/user-agent"):
         user_agent = get_user_agent_from_request(request)
         response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}"
     elif path.startswith("/echo/"):
@@ -87,16 +87,16 @@ def handleFile(file_name):
 
 # get path from the request 
 
-def get_path_from_request(request):
-    # Split the request into lines and extract the path from the first line
-    lines = request.split("\r\n")
-    if lines:
-        # The first line should look like "GET /echo/abc HTTP/1.1"
-        parts = lines[0].split(" ")
-        if len(parts) > 1:
-            return parts[1]
-    # If the path cannot be extracted, return a default value
-    return "/"
+# def get_path_from_request(request):
+#     # Split the request into lines and extract the path from the first line
+#     lines = request.split("\r\n")
+#     if lines:
+#         # The first line should look like "GET /echo/abc HTTP/1.1"
+#         parts = lines[0].split(" ")
+#         if len(parts) > 1:
+#             return parts[1]
+#     # If the path cannot be extracted, return a default value
+#     return "/"
 
 
 # Get user agent 
