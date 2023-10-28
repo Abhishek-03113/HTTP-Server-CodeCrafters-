@@ -1,5 +1,6 @@
 # Uncomment this to pass the first stage
 import socket
+from typing import Required
 
 
 def main():
@@ -33,11 +34,16 @@ def main():
             f"{content}"
         )
         conn.send(res.encode())
-    elif path.startswith("/user-agent"):
-        usrAgent = data.split("User-Agent: ")[1]
+    elif path == "/user-agent":
+        usrAgent = data.split("\r\n")
+        user_agent = str()
 
-        content_length = len(usrAgent)
-        content = usrAgent
+        for agent in usrAgent:
+            if agent.startswith("User-Agent"):
+                user_agent = agent.split("User-Agent:").strip()
+
+        content_length = len(user_agent)
+        content = user_agent
 
         userAgentRes = (
             "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n"
