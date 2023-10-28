@@ -15,9 +15,15 @@ def main():
 
     response = "HTTP/1.1 200 OK\r\n\r\n"
 
-    data = conn.recv(1024)
+    err_response = "HTTP/1.1 404 NOT FOUND\r\n\r\n"
 
-    conn.send(response.encode())
+    data = conn.recv(1024).decode("utf-8")
+    path = data.split(" ")[1]
+
+    if path == "/":
+        conn.send(response.encode())
+    else:
+        conn.send(err_response.encode())
 
 
 if __name__ == "__main__":
