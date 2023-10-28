@@ -20,10 +20,6 @@ def main():
     data = conn.recv(1024).decode("utf-8")
     path = data.split(" ")[1]
 
-    request = data.split(" ")
-
-    stringResponse = request[1].split()[-1]
-
     if path == "/":
         conn.send(response.encode())
 
@@ -31,7 +27,7 @@ def main():
         content = path.split("/echo/")[1]
         content_length = len(content)
 
-        res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {content_length}\r\n\r\n {content}"
+        res = f"HTTP/1.1 200 OK\r\n\r\nContent-Type: text/plain\r\n\r\n Content-Length: {content_length}\r\n\r\n {content}"
         conn.send(res.encode())
 
     else:
