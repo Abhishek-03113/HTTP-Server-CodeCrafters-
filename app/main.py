@@ -10,7 +10,8 @@ HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n"
 
 def handleClient(client):
 
-    request = client.recv(1024).decode("utf-8")
+    request = client.recv(4096)
+    request = request.decode().splitlines()
 
     response = get_response(request)
 
