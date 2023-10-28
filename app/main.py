@@ -48,12 +48,12 @@ def get_response(request, files = None):
             "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 0\r\n\r\n"
         )
     elif path.startswith("/user-agent"):
-        user_agent = get_user_agent_from_request(request)
-        response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}"
-    elif path.startswith("/echo/"):
-        random_string = path[6:]  # Extract the random string from the path
-        response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}".format(
-            len(random_string), random_string
+        content = request[2].split(": ")[1]
+        response = (
+            HTTP_OK + "Content-Type: text/plain\r\n"
+            f"Content-Length: {len(content)}\r\n"
+            "\r\n"
+            f"{content}\r\n"
         )
     
     elif path.startswith("/files"):
@@ -100,14 +100,14 @@ def handleFile(file_name):
 
 
 # Get user agent 
-def get_user_agent_from_request(request):
-    # Split the request into lines and find the User-Agent header
-    lines = request.split("\r\n")
-    for line in lines:
-        if line.startswith("User-Agent:"):
-            return line.split("User-Agent:")[1].strip()
-    # If the User-Agent header is not found, return a default value
-    return "Unknown User Agent"
+# def get_user_agent_from_request(request):
+#     # Split the request into lines and find the User-Agent header
+#     lines = request.split("\r\n")
+#     for line in lines:
+#         if line.startswith("User-Agent:"):
+#             return line.split("User-Agent:")[1].strip()
+#     # If the User-Agent header is not found, return a default value
+#     return "Unknown User Agent"
 
 def main(args):
     # You can use print statements as follows for debugging, they'll be visible when running tests.
