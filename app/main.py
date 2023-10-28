@@ -10,8 +10,26 @@ HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n"
 
 def handleClient(client):
 
+
+
     request = client.recv(4096)
+
+    type_of_request = request.decode().split(" ")[0]
+    path = request.decode().split(" ")[1]
+    content = path[6:]
+    if type_of_request == "POST" and path.startswith("/files/"):
+        filename = path[7:]
+        directory = args.directory
+        filepath = os.path.join(directory, filename)
+        with open(filepath, "w") as f:
+            content_to_r = data.decode().split("\r\n\r\n")[1]
+            f.write(content_to_r)
+            res = f"HTTP/1.1 201 Created\r\nContent-Type: text/plain\r\nContent-Length: {len(content_to_r)}\r\n\r\n{content_to_r}"
+
+            client.send(res.encode())
+
     request = request.decode().splitlines()
+
 
     response = get_response(request)
 
