@@ -3,6 +3,8 @@ import socket
 from typing import Required
 import threading
 import sys
+import os 
+import argparse
 
 
 HTTP_OK = "HTTP/1.1 200 OK\r\n"
@@ -22,7 +24,7 @@ def handleClient(client):
         directory = args.directory
         filepath = os.path.join(directory, filename)
         with open(filepath, "w") as f:
-            content_to_r = data.decode().split("\r\n\r\n")[1]
+            content_to_r = request.decode().split("\r\n\r\n")[1]
             f.write(content_to_r)
             res = f"HTTP/1.1 201 Created\r\nContent-Type: text/plain\r\nContent-Length: {len(content_to_r)}\r\n\r\n{content_to_r}"
 
@@ -146,7 +148,12 @@ def main(args):
     while True:
         client, addr = server_socket.accept()  # wait for client
 
-        client_thread = threading.Thread(target=handleClient,args=(client,))
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--directory", default="")
+        args = parser.parse_args()
+        print(f"the args: {args}")
+
+        client_thread = threading.Thread(target=handleClient,args=(client,args))
 
         client_thread.start()
 
