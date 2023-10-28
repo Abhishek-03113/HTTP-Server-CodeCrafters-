@@ -27,7 +27,11 @@ def main():
         content = path.split("/echo/")[1]
         content_length = len(content)
 
-        res = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {content_length}\r\n\r\n {content}"
+        res = (
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n"
+            f"Content-Length: {content_length}\r\n\r\n"
+            f"{content}"
+        )
         conn.send(res.encode())
 
     else:
