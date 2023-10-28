@@ -30,6 +30,9 @@ def handleClient(client):
     # Close the connection
     client.close()
 
+
+# get path from the request 
+
 def get_path_from_request(request):
     # Split the request into lines and extract the path from the first line
     lines = request.split("\r\n")
@@ -40,6 +43,9 @@ def get_path_from_request(request):
             return parts[1]
     # If the path cannot be extracted, return a default value
     return "/"
+
+
+# Get user agent 
 def get_user_agent_from_request(request):
     # Split the request into lines and find the User-Agent header
     lines = request.split("\r\n")
@@ -58,12 +64,14 @@ def main():
 
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
 
-    client, addr = server_socket.accept()  # wait for client
 
-    client_thread = threading.Thread(target=handleClient,args=(client,))
+    while True:
+        client, addr = server_socket.accept()  # wait for client
 
-    client_thread.start()
-    
+        client_thread = threading.Thread(target=handleClient,args=(client,))
+
+        client_thread.start()
+
 
     # data = conn.recv(1024).decode("utf-8")
 
@@ -104,6 +112,6 @@ def main():
     # else:
     #     conn.send(err_response.encode())
 
-
+    
 if __name__ == "__main__":
     main()
