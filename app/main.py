@@ -28,11 +28,10 @@ def main():
 
     conn.send(res.encode())
 
-
-# if path == "/":
-#     conn.send(response.encode())
-# else:
-#    conn.send(err_response.encode())
+    if path == "/":
+        conn.send(response.encode())
+    else:
+        conn.send(err_response.encode())
 
 
 if __name__ == "__main__":
