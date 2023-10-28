@@ -35,6 +35,24 @@ def handleClient(client,args):
 
     response = get_response(request)
 
+    # path = get_path_from_request(request)
+
+    # if path == "/":
+    #     response = (
+    #         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 0\r\n\r\n"
+    #     )
+    # elif path == "/user-agent":
+    #     user_agent = get_user_agent_from_request(request)
+    #     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}"
+    # elif path.startswith("/echo/"):
+    #     random_string = path[6:]  # Extract the random string from the path
+    #     response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}".format(
+    #         len(random_string), random_string
+    #     )
+    # else:
+    #     # Respond with 404 Not Found for paths that do not match "/echo/" or "/user-agent"
+    #     response = "HTTP/1.1 404 Not Found\r\n\r\n"
+
     client.send(response.encode())  # Encode the string to bytes
     # Close the connection
     client.close()
@@ -88,6 +106,30 @@ def handle_files(file_name):
     return file
 
 
+# get path from the request 
+
+# def get_path_from_request(request):
+#     # Split the request into lines and extract the path from the first line
+#     lines = request.split("\r\n")
+#     if lines:
+#         # The first line should look like "GET /echo/abc HTTP/1.1"
+#         parts = lines[0].split(" ")
+#         if len(parts) > 1:
+#             return parts[1]
+#     # If the path cannot be extracted, return a default value
+#     return "/"
+
+
+# Get user agent 
+# def get_user_agent_from_request(request):
+#     # Split the request into lines and find the User-Agent header
+#     lines = request.split("\r\n")
+#     for line in lines:
+#         if line.startswith("User-Agent:"):
+#             return line.split("User-Agent:")[1].strip()
+#     # If the User-Agent header is not found, return a default value
+#     return "Unknown User Agent"
+
 def main(args):
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
@@ -101,6 +143,8 @@ def main(args):
         global FILES_DIR
         FILES_DIR = args[1]
     
+
+
     while True:
         client, addr = server_socket.accept()  # wait for client
 
@@ -113,6 +157,45 @@ def main(args):
 
         client_thread.start()
 
+
+    # data = conn.recv(1024).decode("utf-8")
+
+   
+
+    # if path == "/":
+    #     conn.send(response.encode())
+
+    # elif path.startswith("/echo/"):
+    #     content = path.split("/echo/")[1]
+    #     content_length = len(content)
+
+    #     res = (
+    #         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n"
+    #         f"Content-Length: {content_length}\r\n\r\n"
+    #         f"{content}"
+    #     )
+    #     conn.send(res.encode())
+    # elif path == "/user-agent":
+    #     usrAgent = data.split("\r\n")
+    #     user_agent = str()
+
+    #     for agent in usrAgent:
+    #         if agent.startswith("User-Agent"):
+    #             user_agent = agent.split("User-Agent:")[1].strip()
+
+    #     content_length = len(user_agent)
+    #     content = user_agent
+
+    #     userAgentRes = (
+    #         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n"
+    #         f"Content-Length: {content_length}\r\n\r\n"
+    #         f"{content}"
+    #     )
+
+    #     conn.send(userAgentRes.encode())
+
+    # else:
+    #     conn.send(err_response.encode())
 
     
 if __name__ == "__main__":
