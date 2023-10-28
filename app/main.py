@@ -33,6 +33,17 @@ def main():
             f"{content}"
         )
         conn.send(res.encode())
+    elif path.startswith("/user-agent"):
+        usrAgent = data.split("User-Agent: ")[1]
+
+        content_length = len(usrAgent)
+        content = usrAgent
+
+        userAgentRes = (
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n"
+            f"Content-Length: {content_length}\r\n\r\n"
+            f"{content}"
+        )
 
     else:
         conn.send(err_response.encode())
