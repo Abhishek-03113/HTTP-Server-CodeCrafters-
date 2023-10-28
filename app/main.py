@@ -73,10 +73,9 @@ def get_response(request, files = None):
 
 
     return response
+
 # function to handle files 
-
 def handleFile(file_name):
-
     try:
         with open(f"{FILES_DIR}{file_name}","r") as f:
             file = f.read
