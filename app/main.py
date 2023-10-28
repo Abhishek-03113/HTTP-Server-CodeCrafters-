@@ -1,6 +1,7 @@
 # Uncomment this to pass the first stage
 import socket
 from typing import Required
+import threading
 
 
 def main():
@@ -19,6 +20,7 @@ def main():
     err_response = "HTTP/1.1 404 NOT FOUND\r\n\r\n"
 
     data = conn.recv(1024).decode("utf-8")
+
     path = data.split(" ")[1]
 
     if path == "/":
@@ -55,6 +57,10 @@ def main():
 
     else:
         conn.send(err_response.encode())
+
+
+def handleClient():
+    pass
 
 
 if __name__ == "__main__":
