@@ -79,10 +79,10 @@ def get_response(request, files=None):
 # function to handle files 
 def handle_files(file_name):
     try:
-        with open(f"{FILES_DIR}{file_name}","r") as f:
-            file = f.read
+        with open(f"{FILES_DIR}{file_name}", "r") as f:
+            file = f.read()
     except FileNotFoundError:
-        file = None 
+        file = None
     return file
 
 
