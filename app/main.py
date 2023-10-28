@@ -101,8 +101,6 @@ def main(args):
         global FILES_DIR
         FILES_DIR = args[1]
     
-
-
     while True:
         client, addr = server_socket.accept()  # wait for client
 
@@ -116,6 +114,7 @@ def main(args):
         client_thread.start()
 
 
+    
 if __name__ == "__main__":
     main(sys.argv[1:])
 
