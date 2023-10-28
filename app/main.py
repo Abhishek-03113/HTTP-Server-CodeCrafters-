@@ -2,13 +2,45 @@
 import socket
 from typing import Required
 import threading
+import sys
 
+
+HTTP_OK = "HTTP/1.1 200 OK\r\n"
+HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n"
 
 def handleClient(client):
 
     request = client.recv(1024).decode("utf-8")
 
-    path = get_path_from_request(request)
+    response = get_response(request)
+
+    # path = get_path_from_request(request)
+
+    # if path == "/":
+    #     response = (
+    #         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 0\r\n\r\n"
+    #     )
+    # elif path == "/user-agent":
+    #     user_agent = get_user_agent_from_request(request)
+    #     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}"
+    # elif path.startswith("/echo/"):
+    #     random_string = path[6:]  # Extract the random string from the path
+    #     response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}".format(
+    #         len(random_string), random_string
+    #     )
+    # else:
+    #     # Respond with 404 Not Found for paths that do not match "/echo/" or "/user-agent"
+    #     response = "HTTP/1.1 404 Not Found\r\n\r\n"
+
+    client.sendall(response.encode("utf-8"))  # Encode the string to bytes
+    # Close the connection
+    client.close()
+
+#get Response 
+
+def get_response(request, files = None):
+
+    _,path,_ = request[0].split(" ")
 
     if path == "/":
         response = (
@@ -22,13 +54,34 @@ def handleClient(client):
         response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\n{}".format(
             len(random_string), random_string
         )
+    
+    elif path.startswith("/files"):
+        file_name = path.split("/files/")[1]
+        file_content = handleFile(file_name)
+
+        if file_content:
+            response = (
+                HTTP_OK + "Content-Type: application/octet-stream\r\n"
+                f"Content-Length: {len(file_content)}\r\n"
+                "\r\n"
+                f"{file_content}\r\n"
+            )
     else:
         # Respond with 404 Not Found for paths that do not match "/echo/" or "/user-agent"
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
-    client.sendall(response.encode("utf-8"))  # Encode the string to bytes
-    # Close the connection
-    client.close()
+
+    return response
+# function to handle files 
+
+def handleFile(file_name):
+
+    try:
+        with open(f"{FILES_DIR}{file_name}","r") as f:
+            file = f.read
+    except FileNotFoundError:
+        file = None 
+    return file
 
 
 # get path from the request 
@@ -55,7 +108,7 @@ def get_user_agent_from_request(request):
     # If the User-Agent header is not found, return a default value
     return "Unknown User Agent"
 
-def main():
+def main(args):
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
 
@@ -63,6 +116,11 @@ def main():
     #
 
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
+
+    if args:
+        global FILES_DIR
+        FILES_DIR = args[1]
+    
 
 
     while True:
@@ -114,4 +172,5 @@ def main():
 
     
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
+
