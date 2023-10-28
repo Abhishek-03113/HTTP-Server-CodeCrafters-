@@ -24,10 +24,10 @@ def main():
 
     stringResponse = request[1].split()[-1]
 
-    #    if path == "/":
-    #       conn.send(response.encode())
-    #  else:
-    #     conn.send(err_response.encode())
+    if path == "/":
+        conn.send(response.encode())
+    else:
+        conn.send(err_response.encode())
 
     if isinstance(stringResponse, str):
         res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {len(stringResponse)}\r\n\r\n {stringResponse}"
