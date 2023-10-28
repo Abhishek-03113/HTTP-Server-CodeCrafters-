@@ -45,6 +45,8 @@ def main():
             f"{content}"
         )
 
+        conn.send(userAgentRes.encode())
+
     else:
         conn.send(err_response.encode())
 
