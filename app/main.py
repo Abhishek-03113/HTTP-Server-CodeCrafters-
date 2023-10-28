@@ -40,7 +40,7 @@ def main():
 
         for agent in usrAgent:
             if agent.startswith("User-Agent"):
-                user_agent = agent.split("User-Agent:").strip()
+                user_agent = agent.split("User-Agent:")[1].strip()
 
         content_length = len(user_agent)
         content = user_agent
