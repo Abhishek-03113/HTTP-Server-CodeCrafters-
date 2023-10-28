@@ -39,13 +39,17 @@ def handleClient(client):
 
 #get Response 
 
-def get_response(request, files = None):
-
-    _,path,_ = request[0].split(" ")
-
+def get_response(request, files=None):
+    _, path, _ = request[0].split(" ")
     if path == "/":
+        response = HTTP_OK + "\r\n"
+    elif path.startswith("/echo"):
+        content = path.split("/echo/")[1]
         response = (
-            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 0\r\n\r\n"
+            HTTP_OK + "Content-Type: text/plain\r\n"
+            f"Content-Length: {len(content)}\r\n"
+            "\r\n"
+            f"{content}\r\n"
         )
     elif path.startswith("/user-agent"):
         content = request[2].split(": ")[1]
@@ -55,11 +59,9 @@ def get_response(request, files = None):
             "\r\n"
             f"{content}\r\n"
         )
-    
     elif path.startswith("/files"):
         file_name = path.split("/files/")[1]
-        file_content = handleFile(file_name)
-
+        file_content = handle_files(file_name)
         if file_content:
             response = (
                 HTTP_OK + "Content-Type: application/octet-stream\r\n"
@@ -67,15 +69,15 @@ def get_response(request, files = None):
                 "\r\n"
                 f"{file_content}\r\n"
             )
+        else:
+            response = HTTP_NOT_FOUND + "\r\n"
     else:
-        # Respond with 404 Not Found for paths that do not match "/echo/" or "/user-agent"
-        response = "HTTP/1.1 404 Not Found\r\n\r\n"
-
-
+        response = HTTP_NOT_FOUND + "\r\n"
+    
     return response
 
 # function to handle files 
-def handleFile(file_name):
+def handle_files(file_name):
     try:
         with open(f"{FILES_DIR}{file_name}","r") as f:
             file = f.read
