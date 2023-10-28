@@ -28,7 +28,10 @@ def main():
         conn.send(response.encode())
 
     elif path.startswith("/echo/"):
-        res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {len(stringResponse)}\r\n\r\n {stringResponse}"
+        content = path.split("/echo/")[1]
+        content_length = len(content)
+
+        res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {content_length}\r\n\r\n {content}"
         conn.send(res.encode())
 
     else:
