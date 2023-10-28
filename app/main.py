@@ -26,15 +26,13 @@ def main():
 
     if path == "/":
         conn.send(response.encode())
+
+    elif path.startswith("/echo/"):
+        res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {len(stringResponse)}\r\n\r\n {stringResponse}"
+        conn.send(res.encode())
+
     else:
         conn.send(err_response.encode())
-
-    if isinstance(stringResponse, str):
-        res = f"HTTP/1.1 200 OK\r\n\r\n Content-Type: text/plain\r\n\r\n Content-Length: {len(stringResponse)}\r\n\r\n {stringResponse}"
-    else:
-        res = err_response
-
-    conn.send(res.encode())
 
 
 if __name__ == "__main__":
