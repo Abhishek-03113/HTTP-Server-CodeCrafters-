@@ -10,7 +10,7 @@ import argparse
 HTTP_OK = "HTTP/1.1 200 OK\r\n"
 HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n"
 
-def handleClient(client):
+def handleClient(client,args):
 
 
 
