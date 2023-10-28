@@ -33,7 +33,7 @@ def handleClient(client):
     #     # Respond with 404 Not Found for paths that do not match "/echo/" or "/user-agent"
     #     response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
-    client.sendall(response.encode("utf-8"))  # Encode the string to bytes
+    client.send(response.encode())  # Encode the string to bytes
     # Close the connection
     client.close()
 
